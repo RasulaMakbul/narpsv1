@@ -26,16 +26,14 @@
                 <form action="{{route('admin.authenticate')}}" method="post">
                     @csrf
                     <div class="input-group mb-3">
-                        <input type="email" name="email" class="form-control" value="{{old('email'}}" id="password" @error('email') is-invalid @enderror placeholder="Email">
+                        <input type="email" name="email" class="form-control" value="{{old('email')}}" id="password" @error('email') is-invalid @enderror placeholder="Email">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
                             </div>
                         </div>
-                        @error('email')
-                        <p class="invalid-feedback">{{$message}}</p>
-                        @enderror
                     </div>
+                    @error('email')<p class="invalid-feedback">{{$message}}</p>@enderror
                     <div class="input-group mb-3">
                         <input type="password" name="password" id="password" class="form-control" @error('password') is-invalid @enderror placeholder="Password">
                         <div class="input-group-append">
@@ -43,10 +41,8 @@
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
-                        @error('password')
-                        <p class="invalid-feedback">{{$message}}</p>
-                        @enderror
                     </div>
+                    @error('password')<p class="invalid-feedback">{{$message}}</p>@enderror
                     <div class="row">
                         <!-- <div class="col-8">
 					  			<div class="icheck-primary">
