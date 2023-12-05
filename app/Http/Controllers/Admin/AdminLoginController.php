@@ -20,8 +20,16 @@ class AdminLoginController extends Controller
             'password' => 'required'
         ]);
         if ($validator->passes()) {
-            if (Auth::guard('admin')->attempt(['email' => $request->email, 'passowrd' => $request->password], $request->get('remember'))) {
-                return redirect()->route('admin.dashboard');
+            if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
+                $admin = Auth::guard('admin')->user();
+                if ($admin->role_as == 2) {
+                    return redirect()->route('admin.dashboard');
+                } else {
+                    Auth::guard('admin')->logout();
+                    return redirect()->back()->with('error', 'Not Authorised!');
+                }
+            } else {
+                return redirect()->back()->with('error', 'Credencials invalid!');
             }
         } else {
             return redirect()->route('admin.login')->withErrors($validator)->withInput($request->only('email'));
