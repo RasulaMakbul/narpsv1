@@ -9,7 +9,7 @@
                 <h1>Create Category</h1>
             </div>
             <div class="col-sm-6 text-right">
-                <a href="categories.html" class="btn btn-primary">Back</a>
+                <a href="{{route('category.index')}}" class="btn btn-primary">Back</a>
             </div>
         </div>
     </div>
@@ -34,7 +34,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="email">Slug</label>
-                                <input type="text" name="slug" id="slug" class="form-control" placeholder="Slug">
+                                <input type="text" name="slug" id="slug" readonly class="form-control" placeholder="Slug">
                                 <p></p>
                             </div>
                         </div>
@@ -96,6 +96,23 @@
             },
             error: function(kqXHR, exception) {
                 error('Something went wrong');
+            }
+        });
+
+    });
+    $("#name").change(function() {
+        element = $(this);
+        $.ajax({
+            url: '{{route("admin.category.getslug")}}',
+            type: 'get',
+            data: {
+                title: element.val()
+            },
+            datatype: 'json',
+            success: function(response) {
+                if (response["status"] == true) {
+                    $("#slug").val(response["slug"]);
+                }
             }
         });
     });

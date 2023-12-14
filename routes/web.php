@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,7 +35,16 @@ Route::group(['prefix' => 'admin'], function () {
         // Route::get('/category/create', [CategoryController::class, 'create'])->name('admin.category.create');
         Route::resource('/category', CategoryController::class);
         Route::get('/getSlug', function (Request $request) {
-        });
+            $slug = '';
+            if (!empty($request->title)) {
+                $slug = Str::slug($request->title);
+            }
+
+            return response()->json([
+                'status' => true,
+                'slug' => $slug
+            ]);
+        })->name('admin.category.getslug');
 
         Route::get('/logout', [DashboardController::class, 'logout'])->name('admin.logout');
     });
