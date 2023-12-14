@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,6 +33,8 @@ Route::group(['prefix' => 'admin'], function () {
 
         // Route::get('/category/create', [CategoryController::class, 'create'])->name('admin.category.create');
         Route::resource('/category', CategoryController::class);
+        Route::get('/getSlug', function (Request $request) {
+        });
 
         Route::get('/logout', [DashboardController::class, 'logout'])->name('admin.logout');
     });
