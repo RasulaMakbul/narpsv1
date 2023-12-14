@@ -34,6 +34,8 @@ Route::group(['prefix' => 'admin'], function () {
 
         // Route::get('/category/create', [CategoryController::class, 'create'])->name('admin.category.create');
         Route::resource('/category', CategoryController::class);
+        //temp-image.create
+        Route::post('/upload-temp-image', [CategoryController::class, 'tempImage'])->name('temp-images.create');
         Route::get('/getSlug', function (Request $request) {
             $slug = '';
             if (!empty($request->title)) {

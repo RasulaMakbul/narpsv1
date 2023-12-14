@@ -4,6 +4,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <div class="container-fluid my-2">
+        @include('admin.layout.partials.message')
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1>Create Category</h1>
@@ -33,12 +34,24 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
+
                                 <label for="email">Slug</label>
                                 <input type="text" name="slug" id="slug" readonly class="form-control" placeholder="Slug">
                                 <p></p>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md 6">
+                            <div class="col-mb-3">
+                                <input type="hidden" readonly id="image_id" value="" name="image_id">
+                                <label for="image">Image</label>
+                                <div id="image" class="dropzone dz-clickable">
+                                    <div class="dz-message needsclick">
+                                        <br>Drop files here or click to upload.<br><br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="email">Status</label>
                                 <select name="status" id="status" class="form-control">
@@ -68,6 +81,7 @@
         event.preventDefault();
 
         var element = $(this);
+        $("button[type=submit]").prop('disabled', true);
 
         $.ajax({
             url: '{{route("category.store")}}',
@@ -75,7 +89,9 @@
             data: element.serializeArray(),
             datatype: 'json',
             success: function(response) {
+                $("button[type=submit]").prop('disabled', false);
                 if (response["status" == true]) {
+                    window.location.href = "{{route('category.index')}}";
                     $("#name").removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
                     $("#slug").removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
                 } else {
@@ -102,6 +118,7 @@
     });
     $("#name").change(function() {
         element = $(this);
+        $("button[type=submit]").prop('disabled', true);
         $.ajax({
             url: '{{route("admin.category.getslug")}}',
             type: 'get',
@@ -110,11 +127,35 @@
             },
             datatype: 'json',
             success: function(response) {
+                $("button[type=submit]").prop('disabled', false);
                 if (response["status"] == true) {
                     $("#slug").val(response["slug"]);
                 }
             }
         });
+    });
+
+    Dropzone.autoDiscover = false;
+    const dropzone = $("#image").dropzone({
+        init: function() {
+            this.on('addedfile', function(file) {
+                if (this.files.length > 1) {
+                    this.removeFile(this.files[0]);
+                }
+            });
+        },
+        url: "{{ route('temp-images.create') }}",
+        maxFiles: 1,
+        paramName: 'image',
+        addRemoveLinks: true,
+        acceptedFiles: "image/jpeg,image/png,image/gif",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(file, response) {
+            $("#image_id").val(response.image_id);
+            //console.log(response)
+        }
     });
 </script>
 @endsection
