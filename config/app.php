@@ -165,6 +165,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 
 
+
         /*
          * Package Service Providers...
          */
@@ -177,6 +178,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        // Intervention\Image\ImageServiceProvider::class
 
     ],
 
@@ -194,6 +196,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // ...
         'Session' => Illuminate\Support\Facades\Session::class,
+        // 'Image' => Intervention\Image\Facades\Image::class
     ])->toArray(),
 
 ];

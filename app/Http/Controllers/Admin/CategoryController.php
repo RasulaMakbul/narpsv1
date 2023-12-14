@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
 
+
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Imagick\Driver;
+
 use Illuminate\Support\Facades\Session;
 
 class CategoryController extends Controller
@@ -49,8 +53,19 @@ class CategoryController extends Controller
                 $newImageName = $category->id . '.' . $ext;
 
                 $sPath = public_path() . '/temp/' . $tempImage->name;
-                $dPath = public_path() . '/uploads/category/thumb/' . $newImageName;
+                $dPath = public_path() . '/uploads/category/' . $newImageName;
                 File::copy($sPath, $dPath);
+
+                $dPath = public_path() . '/uploads/category/thumbs' . $newImageName;
+                $img = ImageManager::imagick()->read($sPath);
+
+                // resize to 300 x 200 pixel
+                $img->resize(300, 200);
+                $img->save($dPath);
+
+                $category->image = $newImageName;
+
+                $category->save();
             }
 
             session()->flash('success', 'Category Added Successfully!');
